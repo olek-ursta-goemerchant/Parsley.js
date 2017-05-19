@@ -51,7 +51,7 @@ Field.prototype = {
   // Validate field and trigger some events for mainly `UI`
   // @returns a promise that succeeds only when all validations do
   // or `undefined` if field is not in the given `group`.
-  whenValidate: function ({force, group} =  {}) {
+  whenValidate: function ({force, group, silent} =  {}) {
     // do not validate a field if not the same as given validation group
     this.refreshConstraints();
     if (group && !this._isInGroup(group))
@@ -63,7 +63,7 @@ Field.prototype = {
     this._trigger('validate');
 
     return this.whenValid({force, value: this.value, _refreshed: true})
-      .always(() => { this._reflowUI(); })
+      .always(() => { this._reflowUI({silent}); })
       .done(() =>   { this._trigger('success'); })
       .fail(() =>   { this._trigger('error'); })
       .always(() => { this._trigger('validated'); })

@@ -23,6 +23,7 @@ var Factory = function (element, options, parsleyFormInstance) {
       Object.assign(savedparsleyFormInstance.options, options);
     }
 
+    // return
     return savedparsleyFormInstance;
   }
 
@@ -34,6 +35,8 @@ var Factory = function (element, options, parsleyFormInstance) {
     throw new Error('Parent instance must be a Form instance');
 
   this.parent = parsleyFormInstance || window.Parsley;
+
+  // return
   return this.init(options);
 };
 

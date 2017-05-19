@@ -72,7 +72,7 @@ UI.Form = {
 
 UI.Field = {
 
-  _reflowUI: function () {
+  _reflowUI: function ({silent} = {}) {
     this._buildUI();
 
     // If this field doesn't have an active UI don't bother doing something
@@ -89,7 +89,7 @@ UI.Field = {
     this._manageStatusClass();
 
     // Add, remove, updated errors messages
-    this._manageErrorsMessages(diff);
+    if (!silent) this._manageErrorsMessages(diff);
 
     // Triggers impl
     this._actualizeTriggers();

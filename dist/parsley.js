@@ -1,6 +1,6 @@
 /*!
 * Parsley.js
-* Version 2.7.2 - built Tue, May 9th 2017, 11:21 am
+* Version 2.7.3 - built Fri, May 19th 2017, 10:29 am
 * http://parsleyjs.org
 * Guillaume Potier - <guillaume@wisembly.com>
 * Marc-Andre Lafortune - <petroselinum@marc-andre.ca>
@@ -891,6 +891,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   UI.Field = {
 
     _reflowUI: function _reflowUI() {
+      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      var silent = _ref2.silent;
+
       this._buildUI();
 
       // If this field doesn't have an active UI don't bother doing something
@@ -906,7 +910,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this._manageStatusClass();
 
       // Add, remove, updated errors messages
-      this._manageErrorsMessages(diff);
+      if (!silent) this._manageErrorsMessages(diff);
 
       // Triggers impl
       this._actualizeTriggers();
@@ -932,12 +936,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // It's a goal of Parsley that this method is no longer required [#1073]
     addError: function addError(name) {
-      var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-      var message = _ref2.message;
-      var assert = _ref2.assert;
-      var _ref2$updateClass = _ref2.updateClass;
-      var updateClass = _ref2$updateClass === undefined ? true : _ref2$updateClass;
+      var message = _ref3.message;
+      var assert = _ref3.assert;
+      var _ref3$updateClass = _ref3.updateClass;
+      var updateClass = _ref3$updateClass === undefined ? true : _ref3$updateClass;
 
       this._buildUI();
       this._addError(name, { message: message, assert: assert });
@@ -947,12 +951,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // It's a goal of Parsley that this method is no longer required [#1073]
     updateError: function updateError(name) {
-      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-      var message = _ref3.message;
-      var assert = _ref3.assert;
-      var _ref3$updateClass = _ref3.updateClass;
-      var updateClass = _ref3$updateClass === undefined ? true : _ref3$updateClass;
+      var message = _ref4.message;
+      var assert = _ref4.assert;
+      var _ref4$updateClass = _ref4.updateClass;
+      var updateClass = _ref4$updateClass === undefined ? true : _ref4$updateClass;
 
       this._buildUI();
       this._updateError(name, { message: message, assert: assert });
@@ -962,10 +966,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // It's a goal of Parsley that this method is no longer required [#1073]
     removeError: function removeError(name) {
-      var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref5 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-      var _ref4$updateClass = _ref4.updateClass;
-      var updateClass = _ref4$updateClass === undefined ? true : _ref4$updateClass;
+      var _ref5$updateClass = _ref5.updateClass;
+      var updateClass = _ref5$updateClass === undefined ? true : _ref5$updateClass;
 
       this._buildUI();
       this._removeError(name);
@@ -1003,17 +1007,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       for (i = 0; i < diff.kept.length; i++) this._updateError(diff.kept[i].assert.name, { message: diff.kept[i].errorMessage, assert: diff.kept[i].assert });
     },
 
-    _addError: function _addError(name, _ref5) {
-      var message = _ref5.message;
-      var assert = _ref5.assert;
+    _addError: function _addError(name, _ref6) {
+      var message = _ref6.message;
+      var assert = _ref6.assert;
 
       this._insertErrorWrapper();
       this._ui.$errorsWrapper.addClass('filled').append($(this.options.errorTemplate).addClass('parsley-' + name).html(message || this._getErrorMessage(assert)));
     },
 
-    _updateError: function _updateError(name, _ref6) {
-      var message = _ref6.message;
-      var assert = _ref6.assert;
+    _updateError: function _updateError(name, _ref7) {
+      var message = _ref7.message;
+      var assert = _ref7.assert;
 
       this._ui.$errorsWrapper.addClass('filled').find('.parsley-' + name).html(message || this._getErrorMessage(assert));
     },
@@ -1249,9 +1253,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         var group = _arguments[0];
         var force = _arguments[1];
-        var event = _arguments[2];
+        var silent = _arguments[2];
+        var event = _arguments[3];
 
-        options = { group: group, force: force, event: event };
+        options = { group: group, force: force, silent: silent, event: event };
       }
       return Form__statusMapping[this.whenValidate(options).state()];
     },
@@ -1260,11 +1265,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var _Utils$all$done$fail$always,
           _this6 = this;
 
-      var _ref7 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref8 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var group = _ref7.group;
-      var force = _ref7.force;
-      var event = _ref7.event;
+      var group = _ref8.group;
+      var force = _ref8.force;
+      var silent = _ref8.silent;
+      var event = _ref8.event;
 
       this.submitEvent = event;
       if (event) {
@@ -1283,7 +1289,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       var promises = this._withoutReactualizingFormOptions(function () {
         return $.map(_this6.fields, function (field) {
-          return field.whenValidate({ force: force, group: group });
+          return field.whenValidate({ force: force, group: group, silent: silent });
         });
       });
 
@@ -1291,7 +1297,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _this6._trigger('success');
       }).fail(function () {
         _this6.validationResult = false;
-        _this6.focus();
+        if (!silent) _this6.focus();
         _this6._trigger('error');
       }).always(function () {
         _this6._trigger('validated');
@@ -1322,10 +1328,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     whenValid: function whenValid() {
       var _this7 = this;
 
-      var _ref8 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref9 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var group = _ref8.group;
-      var force = _ref8.force;
+      var group = _ref9.group;
+      var force = _ref9.force;
 
       this._refreshFields();
 
@@ -1508,10 +1514,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var _whenValid$always$done$fail$always,
           _this10 = this;
 
-      var _ref9 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref10 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var force = _ref9.force;
-      var group = _ref9.group;
+      var force = _ref10.force;
+      var group = _ref10.group;
+      var silent = _ref10.silent;
 
       // do not validate a field if not the same as given validation group
       this.refreshConstraints();
@@ -1523,7 +1530,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this._trigger('validate');
 
       return (_whenValid$always$done$fail$always = this.whenValid({ force: force, value: this.value, _refreshed: true }).always(function () {
-        _this10._reflowUI();
+        _this10._reflowUI({ silent: silent });
       }).done(function () {
         _this10._trigger('success');
       }).fail(function () {
@@ -1582,13 +1589,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     whenValid: function whenValid() {
       var _this11 = this;
 
-      var _ref10 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref11 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var _ref10$force = _ref10.force;
-      var force = _ref10$force === undefined ? false : _ref10$force;
-      var value = _ref10.value;
-      var group = _ref10.group;
-      var _refreshed = _ref10._refreshed;
+      var _ref11$force = _ref11.force;
+      var force = _ref11$force === undefined ? false : _ref11$force;
+      var value = _ref11.value;
+      var group = _ref11.group;
+      var _refreshed = _ref11._refreshed;
 
       // Recompute options and rebind constraints to have latest changes
       if (!_refreshed) this.refreshConstraints();
@@ -1932,6 +1939,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _extends(savedparsleyFormInstance.options, options);
       }
 
+      // return
       return savedparsleyFormInstance;
     }
 
@@ -1941,13 +1949,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     if ('undefined' !== typeof parsleyFormInstance && 'Form' !== parsleyFormInstance.__class__) throw new Error('Parent instance must be a Form instance');
 
     this.parent = parsleyFormInstance || window.Parsley;
+
+    // return
     return this.init(options);
   };
 
   Factory.prototype = {
     init: function init(options) {
       this.__class__ = 'Parsley';
-      this.__version__ = '2.7.2';
+      this.__version__ = '2.7.3';
       this.__id__ = Utils.generateID();
 
       // Pre-compute options
@@ -2069,7 +2079,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     actualizeOptions: null,
     _resetOptions: null,
     Factory: Factory,
-    version: '2.7.2'
+    version: '2.7.3'
   });
 
   // Supplement Field and Form with Base

@@ -2,6 +2,12 @@
 
 ## master
 
+- added silent validation; in silent mode validation will not build error messages in UI;
+
+  $('#element').parsley().validate({silent: true})
+
+## 2.7.2
+
 - Support for Date type (#1158)
 
 ## 2.6.1

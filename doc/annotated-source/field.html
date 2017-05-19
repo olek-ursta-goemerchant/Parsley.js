@@ -225,7 +225,7 @@ or <code>undefined</code> if field is not in the given <code>group</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  whenValidate: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">{force, group} =  {}</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  whenValidate: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">{force, group, silent} =  {}</span>) </span>{</pre></div></div>
             
         </li>
         
@@ -262,7 +262,7 @@ or <code>undefined</code> if field is not in the given <code>group</code>.</p>
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._trigger(<span class="hljs-string">'validate'</span>);
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.whenValid({force, <span class="hljs-attr">value</span>: <span class="hljs-keyword">this</span>.value, <span class="hljs-attr">_refreshed</span>: <span class="hljs-literal">true</span>})
-      .always(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-keyword">this</span>._reflowUI(); })
+      .always(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-keyword">this</span>._reflowUI({silent}); })
       .done(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>   { <span class="hljs-keyword">this</span>._trigger(<span class="hljs-string">'success'</span>); })
       .fail(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>   { <span class="hljs-keyword">this</span>._trigger(<span class="hljs-string">'error'</span>); })
       .always(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-keyword">this</span>._trigger(<span class="hljs-string">'validated'</span>); })

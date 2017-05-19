@@ -77,13 +77,13 @@ Form.prototype = {
   validate: function (options) {
     if (arguments.length >= 1 && !$.isPlainObject(options)) {
       Utils.warnOnce('Calling validate on a parsley form without passing arguments as an object is deprecated.');
-      var [group, force, event] = arguments;
-      options = {group, force, event};
+      var [group, force, silent, event] = arguments;
+      options = {group, force, silent, event};
     }
     return statusMapping[ this.whenValidate(options).state() ];
   },
 
-  whenValidate: function ({group, force, event} = {}) {
+  whenValidate: function ({group, force, silent, event} = {}) {
     this.submitEvent = event;
     if (event) {
       this.submitEvent = Object.assign({}, event, {preventDefault: () => {
@@ -100,14 +100,14 @@ Form.prototype = {
     this._refreshFields();
 
     var promises = this._withoutReactualizingFormOptions(() => {
-      return $.map(this.fields, field => field.whenValidate({force, group}));
+      return $.map(this.fields, field => field.whenValidate({force, group, silent}));
     });
 
     return Utils.all(promises)
       .done(  () => { this._trigger('success'); })
       .fail(  () => {
         this.validationResult = false;
-        this.focus();
+        if (!silent) this.focus();
         this._trigger('error');
       })
       .always(() => { this._trigger('validated'); })

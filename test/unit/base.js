@@ -38,7 +38,7 @@ describe('Base', () => {
     });
     parsleyForm.reset();
 
-    expect($('#parsley-id-' + $('#field1').psly().__id__ + ' li').length).to.be(0);
+    expect($('#parsley-id-' + $('#field1').psly().__id__ + ' li', { reset: false, validate: false }).length).to.be(0);
   });
   it('should use destroy() on field', done => {
     $('body').append('<input type="email" data-parsley-pattern="[A-F][0-9]{5}" data-parsley-required id="element" />');
